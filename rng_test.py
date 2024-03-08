@@ -531,22 +531,22 @@ for i in range(N_rep):
         sw_hash[i,k] = sps.shapiro(error_hash[i,:,k])[1]
 
 
-sw_mean_stride = np.mean(sw_stride, axis=0)
+sw_median_stride = np.median(sw_stride, axis=0)
 sw_max_stride = np.max(sw_stride, axis=0)
 sw_min_stride = np.min(sw_stride, axis=0)
 
-sw_mean_hash = np.mean(sw_hash, axis=0)
+sw_median_hash = np.median(sw_hash, axis=0)
 sw_max_hash = np.max(sw_hash, axis=0)
 sw_min_hash = np.min(sw_hash, axis=0)
 
 plt.figure(figsize=(5, 4))
 
 plt.plot(t_mid, sw_max_stride, 'gD-', fillstyle='none')
-plt.plot(t_mid, sw_mean_stride, 'gD--', fillstyle='none')
+plt.plot(t_mid, sw_median_stride, 'gD--', fillstyle='none')
 plt.plot(t_mid, sw_min_stride, 'gD:', fillstyle='none')
 
 plt.plot(t_mid, sw_max_hash, 'bo-', fillstyle='none')
-plt.plot(t_mid, sw_mean_hash, 'bo--', fillstyle='none')
+plt.plot(t_mid, sw_median_hash, 'bo--', fillstyle='none')
 plt.plot(t_mid, sw_min_hash, 'bo:', fillstyle='none')
 
 plt.grid()
@@ -558,7 +558,7 @@ plt.ylabel(r'Shapiro-Wilk Test $p$-value')
 l1 = Line2D([0], [0], color='g', ls='', marker='*', fillstyle='none', label='Stride')
 l2 = Line2D([0], [0], color='b', ls='', marker='o', fillstyle='none', label='Hash')
 l3 = Line2D([0], [0], color='k', ls='-', label='Max')
-l4 = Line2D([0], [0], color='k', ls='--', label='Mean')
+l4 = Line2D([0], [0], color='k', ls='--', label='Median')
 l5 = Line2D([0], [0], color='k', ls=':', label='Min')
 l6 = Line2D([0], [0], color='r', ls='--', label='0.05')
 
