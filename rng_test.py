@@ -19,12 +19,12 @@ RNG_SEED = nb.uint64(1)
 RNG_STRIDE = nb.uint64(152917)
 
 @nb.njit
-def rng_(seed):
+def lcg(seed):
     return RNG_G * seed + RNG_C & RNG_MOD_MASK 
 
 @nb.njit
 def rng(state):
-    state["seed"] = rng_(state["seed"])
+    state["seed"] = lcg(state["seed"])
     return state["seed"] / RNG_MOD
 
 @nb.njit
