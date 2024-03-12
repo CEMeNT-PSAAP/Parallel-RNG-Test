@@ -433,7 +433,7 @@ ax[0].azim = -37
 ax[0].dist = 9
 ax[0].elev = 17
 
-plt.savefig('qoi.svg', dpi=600,bbox_inches='tight')
+plt.savefig('qoi.svg', dpi=600, bbox_inches='tight')
 plt.show()
 
 # =============================================================================
@@ -515,7 +515,7 @@ ymax = max(ylim1[1], ylim2[1])
 ax[0,1].set_ylim((ymin, ymax))
 ax[1,1].set_ylim((ymin, ymax))
 
-plt.savefig('normal_graph.svg', dpi=600)
+plt.savefig('normal_graph.svg', dpi=600, bbox_inches='tight')
 plt.show()
 
 # =============================================================================
@@ -563,7 +563,7 @@ l5 = Line2D([0], [0], color='k', ls=':', label='Min')
 l6 = Line2D([0], [0], color='r', ls='--', label='0.05')
 
 plt.legend(handles=[l1, l2, l3, l4, l5, l6], ncol=3)
-plt.savefig('normal_test.svg', dpi=600)
+plt.savefig('normal_test.svg', dpi=600, bbox_inches='tight')
 plt.show()
 
 print('')
@@ -578,3 +578,89 @@ print('')
 print('Hash')
 print('  Time : %.2f s'%time_hash)
 print('  p-value < 0.05 : ', np.count_nonzero(sw_hash<0.05))
+
+# =============================================================================
+# Plot Skewness and Kurtosis
+# =============================================================================
+
+skew_stride = np.zeros((N_rep, Nt))
+kurt_stride = np.zeros((N_rep, Nt))
+skew_hash = np.zeros((N_rep, Nt))
+kurt_hash = np.zeros((N_rep, Nt))
+
+for i in range(N_rep):
+    for k in range(Nt):
+        skew_stride[i,k] = sps.skew(error_stride[i,:,k])
+        kurt_stride[i,k] = sps.kurtosis(error_stride[i,:,k])
+        skew_hash[i,k] = sps.skew(error_hash[i,:,k])
+        kurt_hash[i,k] = sps.kurtosis(error_hash[i,:,k])
+
+skew_mean_stride = np.mean(skew_stride, axis=0)
+skew_max_stride = np.max(skew_stride, axis=0)
+skew_min_stride = np.min(skew_stride, axis=0)
+
+skew_mean_hash = np.mean(skew_hash, axis=0)
+skew_max_hash = np.max(skew_hash, axis=0)
+skew_min_hash = np.min(skew_hash, axis=0)
+
+kurt_mean_stride = np.mean(kurt_stride, axis=0)
+kurt_max_stride = np.max(kurt_stride, axis=0)
+kurt_min_stride = np.min(kurt_stride, axis=0)
+
+kurt_mean_hash = np.mean(kurt_hash, axis=0)
+kurt_max_hash = np.max(kurt_hash, axis=0)
+kurt_min_hash = np.min(kurt_hash, axis=0)
+
+plt.figure(figsize=(5, 4))
+
+plt.plot(t_mid, skew_max_stride, 'gD-', fillstyle='none')
+plt.plot(t_mid, skew_mean_stride, 'gD--', fillstyle='none')
+plt.plot(t_mid, skew_min_stride, 'gD:', fillstyle='none')
+
+plt.plot(t_mid, skew_max_hash, 'bo-', fillstyle='none')
+plt.plot(t_mid, skew_mean_hash, 'bo--', fillstyle='none')
+plt.plot(t_mid, skew_min_hash, 'bo:', fillstyle='none')
+
+plt.grid()
+#plt.yscale('log')
+plt.axhline(0.0, color='r', linestyle='--')
+plt.xlabel(r'$t$')
+plt.ylabel(r'Skewness of central flux tally')
+
+l1 = Line2D([0], [0], color='g', ls='', marker='*', fillstyle='none', label='Stride')
+l2 = Line2D([0], [0], color='b', ls='', marker='o', fillstyle='none', label='Hash')
+l3 = Line2D([0], [0], color='k', ls='-', label='Max')
+l4 = Line2D([0], [0], color='k', ls='--', label='Mean')
+l5 = Line2D([0], [0], color='k', ls=':', label='Min')
+l6 = Line2D([0], [0], color='r', ls='--', label='0.0')
+
+plt.legend(handles=[l1, l2, l3, l4, l5, l6], ncol=3)
+plt.savefig('normal_skew.svg', dpi=600, bbox_inches='tight')
+plt.show()
+
+plt.figure(figsize=(5, 4))
+
+plt.plot(t_mid, kurt_max_stride, 'gD-', fillstyle='none')
+plt.plot(t_mid, kurt_mean_stride, 'gD--', fillstyle='none')
+plt.plot(t_mid, kurt_min_stride, 'gD:', fillstyle='none')
+
+plt.plot(t_mid, kurt_max_hash, 'bo-', fillstyle='none')
+plt.plot(t_mid, kurt_mean_hash, 'bo--', fillstyle='none')
+plt.plot(t_mid, kurt_min_hash, 'bo:', fillstyle='none')
+
+plt.grid()
+#plt.yscale('log')
+plt.axhline(0.0, color='r', linestyle='--')
+plt.xlabel(r'$t$')
+plt.ylabel(r'Excess kurtosis of central flux tally')
+
+l1 = Line2D([0], [0], color='g', ls='', marker='*', fillstyle='none', label='Stride')
+l2 = Line2D([0], [0], color='b', ls='', marker='o', fillstyle='none', label='Hash')
+l3 = Line2D([0], [0], color='k', ls='-', label='Max')
+l4 = Line2D([0], [0], color='k', ls='--', label='Mean')
+l5 = Line2D([0], [0], color='k', ls=':', label='Min')
+l6 = Line2D([0], [0], color='r', ls='--', label='0.0')
+
+plt.legend(handles=[l1, l2, l3, l4, l5, l6], ncol=3)
+plt.savefig('normal_kurt.svg', dpi=600, bbox_inches='tight')
+plt.show()
